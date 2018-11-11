@@ -11,5 +11,21 @@
   "contributors": [
     "Paco Vu <paco.vu@gmail.com>"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PacoVu/rev_ai.git"
+  },
+  "keywords": [
+    "speech recogition"
+    "transcription",
+    "text to speech"
+  ],
+  "bugs": {
+    "url": "https://github.com/PacoVu/rev_ai/issues"
+  },
+  "homepage": "https://github.com/PacoVu/rev_ai#readme"
 }
