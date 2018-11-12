@@ -1,8 +1,8 @@
 ## Node JS client library for REV AI
-Provides functions to access Rev AI APIs [http://www.rev.ai](http://www.rev.ai).
+Provides convenient functions to access Rev AI APIs [http://www.rev.ai](http://www.rev.ai).
 
 ## What is Rev AI?
-* Speech to Text service
+* Rev AI is an advanced speech recognition API from the makers of Temi and Rev.com. Power your application with our best-in-class proprietary speech models.
 
 
 ### Installation
