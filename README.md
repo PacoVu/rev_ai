@@ -8,7 +8,7 @@ Provides functions to access Rev AI APIs [http://rev.ai](http://rev.ai).
 ### Installation
 To install, run the following command:
 ```
-npm install rev_ai
+npm install rev_ai --save
 ```
 If you want to install the latest module directly from Github, use the following command:
 ```
@@ -32,7 +32,7 @@ var client = new revai.REVAIClient(rev-ai-apikey, 'v1beta', 'http://user:pass@pr
 ### Call Rev AI endpoints
 ```js
 // Get account info
-client.account((err,resp,body) => {
+client.account(function(err,resp,body){
   console.log(body.balance_seconds/60)
 })
 
@@ -69,7 +69,7 @@ client.getJobById(jobId, function(err,res,body){
   console.log(body)
   if (body.status == "transcribed"){
     // call getTranscription to get the transcription
-    //client.getTranscription(body.id, callback)
+    // client.getTranscription(body.id, callback)
   }
 })
 
@@ -109,10 +109,9 @@ client.post('jobs', params, function(err,resp,body){
 ```
 
 ### Use GET request
-APIs can be accessed via a GET request.
 ```js
 // Get account info
-client.get("account", "", function(err,resp,body){
+client.get("account", {}, function(err,resp,body){
   console.log(body)
 })
 
