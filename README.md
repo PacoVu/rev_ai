@@ -2,7 +2,7 @@
 Provides convenient functions to access Rev AI APIs [http://www.rev.ai](http://www.rev.ai).
 
 ## What is Rev AI?
-* Rev AI is an advanced speech recognition API from the makers of Temi and Rev.com. Power your application with our best-in-class proprietary speech models.
+Rev AI is an advanced speech recognition API from the makers of Temi and Rev.com. Power your application with our best-in-class proprietary speech models.
 
 
 ### Installation
@@ -20,7 +20,7 @@ npm install git+https://github.com/PacoVu/rev_ai
 var revai = require('rev_ai')
 var client = new revai.REVAIClient(rev-ai-apikey, version, proxy)
 ```
-`rev-ai-apikey` [required] You can find your API key [here](https://www.rev.ai/settings) after logging in your account.
+`rev-ai-apikey` [required] you can find your API key [here](https://www.rev.ai/settings) after logging in your account.
 
 `version` [optional] defaults to `'v1beta'`.
 
@@ -75,7 +75,7 @@ client.getJobById(jobId, function(err,res,body){
   }
 })
 
-// Get getTranscription
+// Get transcription
 var callback = function(err,resp,body){
   var json = JSON.parse(body)
   var transcript = ""
@@ -86,7 +86,8 @@ var callback = function(err,resp,body){
   }
   console.log("TRANSCRIPT: " + transcript)
 }
-client.getTranscription(body.id, callback)
+var jobId=12261294
+client.getTranscription(jobId, callback)
 ```
 
 ### Use POST request
