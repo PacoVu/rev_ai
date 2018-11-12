@@ -20,11 +20,13 @@ npm install git+https://github.com/PacoVu/rev_ai
 var revai = require('rev_ai')
 var client = new revai.REVAIClient(rev-ai-apikey, version, proxy)
 ```
-You can find your API key [here](https://www.rev.ai/settings) after logging in your account.
+`rev-ai-apikey` [required] You can find your API key [here](https://www.rev.ai/settings) after logging in your account.
 
-`version` Optional parameter (defaults to `'v1beta'`).
+`version` [optional] defaults to `'v1beta'`.
 
-`proxy` Optional parameter. Set a proxy if you're behind a firewall. Here is an example of initiating the client if you're using proxy:
+`proxy` [optional] set a proxy if you're behind a firewall.
+
+Here is an example of initiating the client if you're using proxy:
 ```js
 var revai = require('rev_ai')
 var client = new revai.REVAIClient(rev-ai-apikey, 'v1beta', 'http://user:pass@proxy.server.com:3128')
@@ -128,7 +130,7 @@ client.get(query, {}, function(err,resp,body){
 var params = {
   limit: 2
 }
-client.get(params, function(err,res,body){
+client.get("jobs", params, function(err,res,body){
   for (var job of body){
     console.log(job.status)
     console.log(job.id)
@@ -136,7 +138,7 @@ client.get(params, function(err,res,body){
   }
 })
 
-// Get get transcription
+// Get transcription by job id
 var jobId=12261294
 var query = 'jobs/' + jobId +"/transcript"
 client.get(query, "", function(err,resp,body){
