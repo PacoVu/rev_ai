@@ -43,156 +43,113 @@ var params = {
 }
 client.transcribe(params, function(err,resp,body){
   console.log(body)
-  //console.log(resp)
-  //console.log(JSON.stringify( resp.body.toString('utf8')));
-  //body.setEncoding('utf8');
-  //console.log(body)
-  //var json = JSON.parse(body.toString('utf8'))
+})
+
+// Transcribe an audio file from url
+var params = {
+  media_url: "http://www.somewhere.com/audio.mp3",
+  metadata: "This is a sample file from a remote url"
+}
+client.transcribe(params, function(err,resp,body){
+  console.log(body)
+})
+
+// Get transcription jobs
+client.getJobs(params, function(err,res,body){
+  for (var job of body){
+    console.log(job.status)
+    console.log(job.id)
+    console.log(job.completed_on)
+  }
+})
+
+// Get a transcription job by job ID
+var jobId=12261294
+client.getJobById(jobId, function(err,res,body){
+  console.log(body)
+  if (body.status == "transcribed"){
+    // call getTranscription to get the transcription
+    //client.getTranscription(body.id, callback)
+  }
+})
+
+// Get getTranscription
+var callback = function(err,resp,body){
+  var json = JSON.parse(body)
+  var transcript = ""
+  for (var item of json.monologues){
+    for (var element of item.elements){
+      transcript += element.value
+    }
+  }
+  console.log("TRANSCRIPT: " + transcript)
+}
+client.getTranscription(body.id, callback)
+```
+
+### Use POST request
+```js
+// Transcribe an audio file from local storage
+var params = {
+  media: "sample1.mp3",
+  metadata: "This is a sample file from local storage"
+}
+client.post('jobs', params, function(err,resp,body){
+  console.log(body)
+})
+
+// Transcribe an audio file from url
+var params = {
+  media_url: "http://www.somewhere.com/audio.mp3",
+  metadata: "This is a sample file from a remote url"
+}
+client.post('jobs', params, function(err,resp,body){
+  console.log(body)
 })
 ```
 
-The order of the arguments is strict. It must be in the following order:
-method("api_name", {params}, callback_method)
-```js
-var data = {'text' : 'I like cats'}
-client.post('analyzesentiment', data, callback)
-```
-
-### GET request
+### Use GET request
 APIs can be accessed via a GET request.
 ```js
-var data = {'text' : 'I like cats'}
-client.get('analyzesentiment', data, false, function(err, resp, body) {
-  if (!err) {
-    console.log(resp.body)
+// Get account info
+client.get("account", "", function(err,resp,body){
+  console.log(body)
+})
+
+// Get a transcription job by job ID
+var jobId=12261294
+var query = 'jobs/' + jobId
+client.get(query, {}, function(err,resp,body){
+  console.log(body.status)
+  console.log(body.id)
+  console.log(body.completed_on)
+})
+
+// Get transcription jobs
+var params = {
+  limit: 2
+}
+client.get(params, function(err,res,body){
+  for (var job of body){
+    console.log(job.status)
+    console.log(job.id)
+    console.log(job.completed_on)
   }
 })
-```
 
-### Async calls
-
-While node will mostly deals with processes asynchronously, Haven OnDemand offers server side asynchronous call methods which should be used with large files and slow queries. Pass a boolean for the async parameter. The API response will return back a job ID which is used to check the status or result of your API request.
-```js
-var jobID
-var data = {'text': 'I love dogs'}
-client.post('analyzesentiment', data, true, function(err, resp, body) {
-  jobID = resp.body.jobID
-  console.log(jobID)
-})
-```
-**(Recommended method)** To check the status of your API call, use the following code with the jobID from obtained from the async call above. This will tell you if it's still processing or if it's complete, and if so, it will return the result.
-```js
-client.getJobStatus(jobID, function(err, resp, body) {
-  console.log(resp.body)
-})
-```
-Or, to check the result of your API call, use the following code with the jobID obtained from the async call. *Note: This method may timeout if your async API call is still processing.*
-```js
-client.getJobResult(jobID, function(err, resp, body) {
-  console.log(resp.body)
-})
-```
-
-### Posting files
-
-File posting is handled using the "file" parameter name which is used for all current file postings in Haven OnDemand
-
-```js
-var data = {'file' : 'test.txt'}
-client.post('analyzesentiment', data, false, function(err, resp, body) {
-  if (err) {
-    console.log(err)
-  } else {
-    console.log(resp.body)
-  }
-})
-```
-
-### Combinations
-
-Haven OnDemand allows to chain two ore more APIs together to create customizable, reusable services. These combinations enable one data input to have unlimited transformations and processing all from a single API call.
-
-If you created a combination API name "sentimentanalysistoindex" which takes input as plain text. You can call the combination API from the code shown below:
-```js
-var params = {text : "Haven OnDemand is awesome."};
-client.post_combination('sentimentanalysistoindex', params, false, function(err, resp, body) {
-  if (err) {
-    console.log(err)
-  } else {
-    console.log(resp.body)
-  }
-})
-```
-If you created a combination API name "sentimentanalysistoindex" which takes JSON input and presumed that the name of your input is "jsoninput". And your combination API was defined to parse the jsonContent similar to the format below. You can call the combination API from the code as follows:
-```js
-var jsonContent = '{"arrayinput":[{"content":"Haven OnDemand is awesome."},{"content":"Sentiment Analysis API is very usefule."}]}'
-var params = {}
-params.jsoninput = jsonContent
-client.get_combination('sentimentanalysistoindex', params, false, function(err, resp, body) {
-  if (err) {
-    console.log(err)
-  } else {
-    console.log(resp.body)
-  }
-})
-```
-If you created a combination API name "sentimentanalysistoindex" which takes a file input and presumed that the name of your input is "textfile". And your combination API was defined to take also the language configuration. You can call the combination API from the code as follows:
-```js
-var files = [{"textfile":"path/document.txt"}]
-var params = {}
-params.file = files
-params.language = "eng"
-client.post_combination('sentimentanalysistoindex', params, false, function(err, resp, body) {
-  if (err) {
-    console.log(err)
-  } else {
-    console.log(resp.body)
-  }
-})
-```
-
-To find out more about combinations and how to create one, see [here](https://dev.havenondemand.com/combination/home).
-
-### Batch jobs
-
-Haven OnDemand allows you to batch multiple API jobs in a single request using the Job API, for example, to analyze a batch of web pages, documents or social media messages where you need to analyze each text individually but want to be more efficient with your code, or where you want to execute multiple API calls on a single web page, document, or text. **Note: files are currently not supported in this wrapper for batch jobs.**
-
-```js
-var jobID
-var data = [
-  { "name": "analyzesentiment",
-     "version": "v1",
-     "params": {
-        'text': 'I love dogs'
+// Get get transcription
+var jobId=12261294
+var query = 'jobs/' + jobId +"/transcript"
+client.get(query, "", function(err,resp,body){
+  if (!err){
+    var json = JSON.parse(body)
+    var transcript = ""
+    for (var item of json.monologues){
+      for (var element of item.elements){
+        transcript += element.value
       }
-   },
-   { "name": "extractconcepts",
-      "version": "v1",
-      "params": {
-         "url": "http://en.wikipedia.org/wiki/United_Kingdom"
-       }
     }
- ]
-client.batchJob(data, function(err, resp, body) {
-  jobID = resp.body.jobID
-  console.log(jobID)
-})
-
-//
-// check result of async request with Status API after some time
-//
-
-client.getJobStatus(jobID, function(err, resp, body) {
-  console.log(resp.body)
+    console.log("TRANSCRIPT: " + transcript)
+  }
 })
 ```
-
-
-## Contributing
-We encourage you to contribute to this repo! Please send pull requests with modified and updated code.
-
-1. Fork it ( https://github.com/HPE-Haven-OnDemand/havenondemand-node/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
