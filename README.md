@@ -1,8 +1,8 @@
-# Node JS client library for REV AI
+## Node JS client library for REV AI
 Provides functions to access Rev AI APIs [http://rev.ai](http://rev.ai).
 
 ## What is Rev AI?
-* Speech to text
+* Speech to Text service
 
 
 ### Installation
@@ -12,7 +12,7 @@ npm install rev_ai
 ```
 If you want to install the latest module directly from Github, use the following command:
 ```
-npm install git+https://github.com/PacoVu/rev-ai-node
+npm install git+https://github.com/PacoVu/rev_ai
 ```
 
 ### Include it
@@ -20,23 +20,35 @@ npm install git+https://github.com/PacoVu/rev-ai-node
 var revai = require('rev_ai')
 var client = new revai.REVAIClient(rev-ai-apikey, version, proxy)
 ```
-You can find your API key [here](https://www.haveondemand.com/account/api-keys.html) after signing up.
+You can find your API key [here](https://www.rev.ai/settings) after logging in your account.
 
-`version` is an optional parameter (defaults to `'v1beta'`).
+`version` Optional parameter (defaults to `'v1beta'`).
 
-`proxy` is an optional parameter. Please set this if you're behind a firewall. Here is an example of iniating the client if you're using a proxy:
+`proxy` Optional parameter. Set a proxy if you're behind a firewall. Here is an example of initiating the client if you're using proxy:
 ```js
 var revai = require('rev_ai')
 var client = new revai.REVAIClient(rev-ai-apikey, 'v1beta', 'http://user:pass@proxy.server.com:3128')
 ```
-### Callback
-Define a callback function and pass it as an argument
+### Call Rev AI endpoints
 ```js
-var callback = function(err,resp,body){
-  console.log(body)
+// Get account info
+client.account((err,resp,body) => {
+  console.log(body.balance_seconds/60)
+})
+
+// Transcribe an audio file from local storage
+var params = {
+  media: "sample1.mp3",
+  metadata: "This is a sample file from local storage"
 }
-var data = {'text' : 'I like cats'}
-client.post('analyzesentiment', data, false, callback)
+client.transcribe(params, function(err,resp,body){
+  console.log(body)
+  //console.log(resp)
+  //console.log(JSON.stringify( resp.body.toString('utf8')));
+  //body.setEncoding('utf8');
+  //console.log(body)
+  //var json = JSON.parse(body.toString('utf8'))
+})
 ```
 
 The order of the arguments is strict. It must be in the following order:
