@@ -1,7 +1,5 @@
-**Note:** formerly known as `iod-node`. For the older version, see the `iod` branch.
-
 # Node JS client library for REV AI
-Unofficial client library to help with calling Rev AI APIs [http://rev.ai](http://rev.ai).
+Provides functions to access Rev AI APIs [http://rev.ai](http://rev.ai).
 
 ## What is Rev AI?
 * Speech to text
@@ -20,19 +18,19 @@ npm install git+https://github.com/PacoVu/rev-ai-node
 ### Include it
 ```js
 var revai = require('rev_ai')
-var client = new revai.REVAIClient(apikey, version, proxy)
+var client = new revai.REVAIClient(rev-ai-apikey, version, proxy)
 ```
 You can find your API key [here](https://www.haveondemand.com/account/api-keys.html) after signing up.
 
-`version` is an optional parameter (defaults to `'v1'`) and can be either `'v1'` or `'v2'`.
+`version` is an optional parameter (defaults to `'v1beta'`).
 
 `proxy` is an optional parameter. Please set this if you're behind a firewall. Here is an example of iniating the client if you're using a proxy:
 ```js
-var havenondemand = require('havenondemand')
-var client = new havenondemand.HODClient('123456-asdf', 'v1', 'http://user:pass@proxy.server.com:3128')
+var revai = require('rev_ai')
+var client = new revai.REVAIClient(rev-ai-apikey, 'v1beta', 'http://user:pass@proxy.server.com:3128')
 ```
 ### Callback
-We must define a callback function and pass it as an argument
+Define a callback function and pass it as an argument
 ```js
 var callback = function(err,resp,body){
   console.log(body)
@@ -42,10 +40,10 @@ client.post('analyzesentiment', data, false, callback)
 ```
 
 The order of the arguments is strict. It must be in the following order:
-method("api_name", {params}, async=[true|false], callback_method)
+method("api_name", {params}, callback_method)
 ```js
 var data = {'text' : 'I like cats'}
-client.post('analyzesentiment', data, false, callback)
+client.post('analyzesentiment', data, callback)
 ```
 
 ### GET request
