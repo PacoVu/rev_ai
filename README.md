@@ -1,5 +1,5 @@
 ## Node JS client library for REV AI
-Provides functions to access Rev AI APIs [http://rev.ai](http://rev.ai).
+Provides functions to access Rev AI APIs [http://rev.ai](http://www.rev.ai).
 
 ## What is Rev AI?
 * Speech to Text service
