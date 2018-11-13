@@ -2,8 +2,7 @@
 Provides convenient functions to access Rev AI APIs [http://www.rev.ai](http://www.rev.ai).
 
 ## What is Rev AI?
-Rev AI is an advanced speech recognition API from the makers of Temi and Rev.com. Power your application with our best-in-class proprietary speech models.
-
+Rev AI is an advanced speech recognition API from the makers of Temi and Rev.com.
 
 ### Installation
 To install, run the following command:
@@ -57,6 +56,9 @@ client.transcribe(params, function(err,resp,body){
 })
 
 // Get transcription jobs
+var params = {
+  limit: 2
+}
 client.getJobs(params, function(err,res,body){
   for (var job of body){
     console.log(job.status)
